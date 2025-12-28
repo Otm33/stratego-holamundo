@@ -1,0 +1,71 @@
+/*este es el cuadro donde va a estar el tablero*/
+.board-container{
+  display: grid; /* grid para el diseño de la matriz de las casillas*/
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* un espacio 10 casillas por 10 casillas*/
+  gap:2px;/* un espacio entre ellas de 2*/
+  width: 650px;         /*ancho */
+  height: 650px;        /*alto */
+  background-color: #000; /*fondo negro*/
+  padding: 5px;
+}
+/* casilla de tierra  */
+.cell{
+  display: flex;/* para que se pueda modificar su ubicacion en pantalla*/
+  aspect-ratio: 1 / 1;/* para que aparescan como cuadrador*/
+  justify-content: center; /* centrar cada una de las casillas*/
+  align-items: center; 
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color:  #4A8234;/* verde*/
+  border-radius: 15px;/* bordes redondeados*/
+}
+/* casilla de lago*/
+.lake{  
+  background-color: #2F5C73;/* azul*/
+}
+
+/* diseño del espacio de juego*/
+.game-layout {
+  display: flex; /*acomoda todo uno al lado del inventario */
+  gap: 20px; /* espacio de 20 entre ellos*/
+  justify-content: center; /* los centra*/
+  padding: 20px;
+}
+
+/* barra lateral */
+.sidebar {
+  background-color: #7927F5; /* morado*/
+  padding: 10px;
+  border-radius: 8px;/* bordes redondeados*/
+  color: white;
+  min-width: 200px;
+}
+
+/* inventario */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 piezas por fila en el inventario */
+  gap: 5px;
+  margin-top: 10px;
+}
+
+/*piezas */
+.piece {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /*bordes redondeados */
+  background-color: #e74c3c; /* rojo */
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: grab; /* cursor en modo mano */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+  user-select: none; /* para que el usuario no seleccione el texot */
+}
+
+/* piezas azules por si toca ser azul */
+.piece.blue {
+  background-color: #3498db;
+}
