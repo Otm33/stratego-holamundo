@@ -2,9 +2,9 @@
 Proyecto de recrear el juego estratego en la web usando web sockets y api fetch en html, css y js vanilla. Para la materia POW por los integrantes de HolaMundo
 
 ### Integantes:
--Orlando Valdez
--Jenry Youssef
--Oscar Torres
+* Orlando Valdez
+* Jenry Youssef
+* Oscar Torres
 
 ### ¿Como probar el juego?
 1. Descagar el contenido del repositorio
