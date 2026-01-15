@@ -63,3 +63,65 @@ Para facilitar el mantenimiento de los datos mas importantes para el juego y la 
 * **`BOARD_CONFIG`:** Define dimensiones y ubicacion de los lagos
 * **`API_CONFIG`:** Endpoints 
 
+
+
+
+## Etapa I: Lobby y Comunicación WebSocket (Completado)
+
+### Arquitectura de Red
+El proyecto implementa un sistema de comunicación dual según las especificaciones del proyecto:
+* **WebSocket**: Para eventos en tiempo real (chat global, actualizaciones de lobby)
+* **REST API + SSE**: Para operaciones CRUD y notificaciones asíncronas
+
+### Archivos Implementados
+
+#### 1. Sistema de Red (`js/network/websocket-manager.js`)
+Gestor centralizado de conexiones WebSocket que maneja:
+* Conexión persistente al gateway: `wss://stratego-api.koyeb.app/gateway?userId={uuid}`
+* Sistema de eventos con callbacks registrables
+* Envío y recepción de mensajes en formato JSON
+* Manejo de eventos: `lobby_update`, `lobby_chat_message`, `challenge_received`, `challenge_answered`
+
+#### 2. Interfaz de Lobby (`lobby.html`)
+Pantalla principal del "Club de Oficiales" dividida en:
+* **Panel de Login**: Validación de nombres (3-30 caracteres, alfanuméricos)
+* **Lista de Usuarios**: Muestra jugadores conectados y el bot "Mariscal Autómata"
+* **Chat Global**: Comunicación en tiempo real vía WebSocket
+* **Panel de Acciones**: Opciones para retos PvP y modo PvE
+
+#### 3. Lógica de Lobby (`js/lobby-main.js`)
+Controlador que integra:
+* **Registro de usuarios**: `POST /api/sessions` con validación de formato
+* **Gestión de presencia**: Actualización automática vía `lobby_update`
+* **Chat global**: Envío con formato `{event: 'send_lobby_chat', data: {content: '...'}}`
+* **Sistema de retos**: Selección aleatoria de `protocolMode` (FETCH_FIRST/SOCKET_FIRST)
+* **Logout**: `DELETE /api/sessions/current` con desconexión limpia del WebSocket
+
+#### 4. Estilos (`styles/lobby.css`)
+Diseño responsivo con:
+* Layout de 3 columnas usando CSS Grid
+* Tema oscuro con acentos dorados (#D1BD43)
+* Efectos hover y transiciones
+* Modal para notificaciones de retos
+* Scrollbars personalizadas
+
+### Funcionalidades Operativas
+✅ Login con validación de nombre único  
+✅ Conexión WebSocket automática tras registro  
+✅ Lista dinámica de usuarios (actualización en tiempo real)  
+✅ Chat global broadcast funcionando  
+✅ Selección de oponentes con indicador visual  
+✅ Sistema de retos PvP con configuración de modo (Guerra Clásica/Duelo Rápido)  
+✅ Opción de entrenamiento contra bot (PvE)  
+✅ Logout con limpieza de recursos  
+
+### Próximos Pasos
+- [ ] Implementar Etapa II: Setup (colocación de piezas)
+- [ ] Integrar sistema de retos con transición a pantalla de juego
+- [ ] Implementar SSE para eventos cuando `protocolMode === 'FETCH_FIRST'`
+
+### ¿Cómo probar el Lobby?
+1. Abrir `lobby.html` con Live Server
+2. Ingresar un nombre de usuario válido
+3. Probar el chat global enviando mensajes
+4. Abrir otra pestaña/navegador con diferente usuario para ver comunicación en tiempo real
