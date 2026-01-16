@@ -28,7 +28,6 @@ export function validateMove(boardObj, start, end, piece) {
   if (targetCell && typeof targetCell === 'object' && targetCell.team === piece.team) {
     return { valid: false, message: 'No puedes ocupar esa casilla. Hay una tropa/pieza ahi' };
   }
-
   //condicion para delimitar los lagos
   if (targetCell === 'LAKES') {
     return { valid: false, message: 'No puedes moverte en un lago' };
@@ -41,7 +40,6 @@ export function validateMove(boardObj, start, end, piece) {
   if (deltaRow > 0 && deltaCol > 0) {
     return { valid: false, message: 'Solo te puedes desplazar hacia arriba, abajo, izquierda o derecha' };
   }
-
   //condicional que si la pieza es un explorador, tiene permitido moverse cualquier distancia pero sin saltar obstaculos
   if (piece.rank === PIECE_RANKS.SCOUT) {
     return validateScoutPath(matrix, start, end, deltaRow, deltaCol);
@@ -53,18 +51,15 @@ export function validateMove(boardObj, start, end, piece) {
   }
   return { valid: true };
 }
-
 function validateScoutPath(matrix, start, end, deltaRow, deltaCol) {
   //determina direccion del paso
   const stepRow = end.row > start.row ? 1 : (end.row < start.row ? -1 : 0);
   const stepCol = end.col > start.col ? 1 : (end.col < start.col ? -1 : 0);
   let currentRow = start.row + stepRow;
   let currentCol = start.col + stepCol;
-
   // ciclo para recorrer las casillas del medio del tablero
   while (currentRow !== end.row || currentCol !== end.col) {
     const cellContent = matrix[currentRow][currentCol];
-
     // condicion para saber si hay algo en el camino como una casilla de lago o una pieza y bloquea
     if (cellContent !== null) {
       return { valid: false, message: 'El camino esta bloqueado' };
@@ -74,7 +69,6 @@ function validateScoutPath(matrix, start, end, deltaRow, deltaCol) {
   }
   return { valid: true };
 }
-
 /**
  * Resuelve el combate entre dos piezas
  * @param {Object} attacker pieza atacante.
@@ -84,22 +78,17 @@ function validateScoutPath(matrix, start, end, deltaRow, deltaCol) {
 //funcion para la logica de los combates
 export function resolveCombat(attacker, defender) {
   console.log(`Pelea: ${attacker.rank} vs ${defender.rank}`);
-
   //espia mata al mariscal 
   if (attacker.rank === 10 && defender.rank === 1) return 'ATTACKER';
-
   //minero desactiva bomba 
   if (attacker.rank === 8 && defender.rank === 11) return 'ATTACKER';
-
   //bomba mata a cualquiera (menos al minero)
   if (defender.rank === 11) return 'DEFENDER';
-
   //captura de bandera
   if (defender.rank === 0) {
     alert('¡VICTORIA! Capturaste la bandera');
     return 'ATTACKER';
   }
-
   if (attacker.rank < defender.rank) return 'ATTACKER';
   if (attacker.rank > defender.rank) return 'DEFENDER';
   return 'DRAW'; // empate

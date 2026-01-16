@@ -7,7 +7,6 @@ export class Board {
     this.matrix = [];
     this.initializeBoard();
   }
-
   //metodo para hacer una matriz 10x10, cada casilla es null
   initializeBoard() {
     const lakeSet = new Set(BOARD_CONFIG.LAKES);//variable que tiene los datos de las casillas de los lagos
@@ -23,6 +22,4 @@ export class Board {
       this.matrix.push(row);
     }
   }
-
-
 }

@@ -20,5 +20,3 @@ export class Piece {
     return this.rank;
   }
 }
-
-

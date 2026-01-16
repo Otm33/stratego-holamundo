@@ -1,6 +1,6 @@
 /**
- * Gestor centralizado de conexiones WebSocket para Stratego
- * Maneja la conexión, envío y recepción de mensajes del servidor
+ * gestor centralizado de conexiones WebSocket para Stratego
+ * maneja la conexion, envio y recepcion de mensajes del servidor
  */
 
 export class WebSocketManager {
@@ -10,7 +10,7 @@ export class WebSocketManager {
         this.userId = null;
         this.username = null;
         
-        // Callbacks que otros módulos pueden registrar
+        // callbacks que otros modulos pueden registrar
         this.eventHandlers = {
             lobby_update: [],
             lobby_chat_message: [],
@@ -28,136 +28,147 @@ export class WebSocketManager {
     }
 
     /**
-     * Conecta al servidor WebSocket
-     * @param {string} userId - El ID del usuario obtenido del registro
-     * @param {string} username - El nombre del usuario
+     * conecta al servidor WebSocket
+     * @param {string} userId - el ID del usuario obtenido del registro
+     * @param {string} username - el nombre del usuario
      */
     connect(userId, username) {
         if (this.isConnected) {
-            console.warn('Ya existe una conexión WebSocket activa');
+            console.warn('ya existe una conexion WebSocket activa');
             return;
         }
 
         this.userId = userId;
         this.username = username;
 
-        // Conexión al gateway de WebSockets
+        // conexion al gateway de WebSockets
         this.socket = new WebSocket(`wss://stratego-api.koyeb.app/gateway?userId=${userId}`);
 
-        // Evento: Conexión exitosa
+        // evento: Conexion exitosa
         this.socket.onopen = () => {
             this.isConnected = true;
-            console.log('✅ WebSocket CONECTADO - Estado:', this.socket.readyState);
+            console.log('WebSocket CONECTADO - estado:', this.socket.readyState);
             
-            // Enviar identificación al servidor
+            // enviar identificacion al servidor
             this.sendIdentification();
         };
 
-// Evento: Mensaje recibido del servidor
+// evento: Mensaje recibido del servidor
 this.socket.onmessage = (event) => {
-    
-    //logs
-    console.log('📩 MENSAJE DEL SERVIDOR:', event.data);
+    console.log('MENSAJE DEL SERVIDOR:', event.data);
     console.log('========== MENSAJE RECIBIDO ==========');
-    console.log('📦 Datos crudos:', event.data);
-    console.log('📦 Tipo:', typeof event.data);
+    console.log('Datos crudos:', event.data);
+    console.log('Tipo:', typeof event.data);
+    
+    //  userId actual
+    console.log('mi serId:', this.userId);
     
     try {
         const data = JSON.parse(event.data);
-        console.log('📩 Mensaje parseado:', data);
+        console.log('mensaje parseado:', data);
         
-        // Distribuir el mensaje a los handlers registrados
+        // si es challenge_received, mostrar a quien va dirigido
+        if (data.event === 'challenge_received') {
+            console.log('🚨🚨🚨 RETO RECIBIDO 🚨🚨🚨');
+            console.log('para:', data.data?.challenged?.userId || 'desconocido');
+        }
+        
         this.handleIncomingMessage(data);
     } catch (error) {
-        console.error('❌ Error al parsear mensaje WebSocket:', error);
-        console.log('📦 Contenido que falló:', event.data);
+        console.error(' error al parsear mensaje WebSocket:', error);
+        console.log('contenido que fallo:', event.data);
     }
     
     console.log('========================================');
 };
 
 
-        // Evento: Error en la conexión
+
+        // evento: Error en la conexion
         this.socket.onerror = (error) => {
-            console.error('❌ Error en WebSocket:', error);
+            console.error(' error en WebSocket:', error);
         };
 
-        // Evento: Conexión cerrada
+        // evento: Conexion cerrada
         this.socket.onclose = () => {
             this.isConnected = false;
-            console.log('🔌 Conexión WebSocket cerrada');
+            console.log('conexion WebSocket cerrada');
         };
     }
 
 /**
- * Envía la identificación del usuario al servidor
+ * envia la identificacion del usuario al servidor
  * (si el servidor lo requiere al conectar)
  */
 sendIdentification() {
-    // El servidor no requiere identificación manual al conectar
-    // La autenticación se hace vía REST API (POST /api/sessions)
-    console.log(`✅ Usuario conectado al WebSocket: ${this.username} (${this.userId})`);
+    // el userId ya esta en la URL del WebSocket
+    // no se necesita mensaje extra de autenticacion
+    console.log(`usuario conectado al WebSocket: ${this.username} (${this.userId})`);
 }
 
+
     /**
-     * Registra un callback para un tipo de evento específico
-     * @param {string} eventType - Tipo de evento (ej: 'lobby_chat_message')
-     * @param {Function} callback - Función a ejecutar cuando llegue el evento
+     * registra un callback para un tipo de evento especifico
+     * @param {string} eventType - tipo de evento (ej: 'lobby_chat_message')
+     * @param {Function} callback - funcion a ejecutar cuando llegue el evento
      */
     on(eventType, callback) {
         if (this.eventHandlers[eventType]) {
             this.eventHandlers[eventType].push(callback);
         } else {
-            console.warn(`Tipo de evento desconocido: ${eventType}`);
+            console.warn(`tipo de evento desconocido: ${eventType}`);
         }
     }
 
 /**
- * Distribuye los mensajes entrantes a los handlers correspondientes
- * @param {Object} data - Datos del mensaje recibido
+ * distribuye los mensajes entrantes a los handlers correspondientes
+ * @param {Object} data - datos del mensaje recibido
  */
 handleIncomingMessage(data) {
+
+    console.log('🔍 DEBUG handleIncomingMessage:', data);
+
     let eventType = null;
     let payload = null;
 
-    // Detectar el formato
+    // detectar el formato
     if (data.event && data.payload) {
-        // Formato: { event: 'nombre', payload: {...} }
+        // formato: { event: 'nombre', payload: {...} }
         eventType = data.event;
         payload = data.payload;
     } else if (data.event && data.data) {
-        // 👇 FORMATO DEL SERVIDOR: { event: 'nombre', data: {...} }
+        // FORMATO DEL SERVIDOR: { event: 'nombre', data: {...} }
         eventType = data.event;
         payload = data.data;
     } else if (data.type) {
-        // Formato: { type: 'nombre', ...resto }
+        // formato: { type: 'nombre', ...resto }
         eventType = data.type;
         payload = data;
     } else {
-        console.warn('❌ Mensaje sin formato reconocido:', data);
+        console.warn('mensaje sin formato reconocido:', data);
         return;
     }
 
     if (!eventType) {
-        console.warn('❌ Mensaje sin tipo de evento:', data);
+        console.warn('mensaje sin tipo de evento:', data);
         return;
     }
 
-    console.log(`📨 Evento detectado: "${eventType}"`, payload);
+    console.log(`evento detectado: "${eventType}"`, payload);
 
-    // Ejecutar callbacks
+    // ejecutar callbacks
     if (this.eventHandlers[eventType]) {
         this.eventHandlers[eventType].forEach(callback => {
             callback(payload);
         });
     } else {
-        console.warn(`⚠️ No hay handlers para el evento: ${eventType}`);
+        console.warn(`no hay handlers para el evento: ${eventType}`);
     }
 }
 
 
 sendLobbyChat(content) {
-    console.log('🔴 DEBUG sendLobbyChat llamado');
+    console.log('DEBUG sendLobbyChat llamado');
     console.log('isConnected:', this.isConnected);
     console.log('socket:', this.socket);
     console.log('content:', content);
@@ -173,14 +184,14 @@ const message = {
 
 
 
-    console.log('📤 Enviando mensaje:', message);
-    console.log('📤 Stringified:', JSON.stringify(message));
+    console.log('enviando mensaje:', message);
+    console.log('stringified:', JSON.stringify(message));
     
     try {
         this.socket.send(JSON.stringify(message));
-        console.log('✅ Mensaje enviado exitosamente');
+        console.log('mensaje enviado exitosamente');
     } catch (error) {
-        console.error('❌ Error al enviar mensaje:', error);
+        console.error('error al enviar mensaje:', error);
     }
 }
 
@@ -189,13 +200,13 @@ const message = {
 
 
     /**
-     * Envía un mensaje al chat privado de la partida
+     * envia un mensaje al chat privado de la partida
      * @param {string} matchId - ID de la partida actual
-     * @param {string} content - Contenido del mensaje
+     * @param {string} content - contenido del mensaje
      */
     sendMatchChat(matchId, content) {
         if (!this.isConnected) {
-            console.error('No hay conexión WebSocket');
+            console.error('no hay conexion WebSocket');
             return;
         }
 
@@ -211,13 +222,13 @@ const message = {
     }
 
     /**
-     * Cierra la conexión WebSocket
+     * cierra la conexion WebSocket
      */
     disconnect() {
         if (this.socket && this.isConnected) {
             this.socket.close();
             this.isConnected = false;
-            console.log('🔌 Desconectado del servidor');
+            console.log('Desconectado del servidor');
         }
     }
 }

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stratego - Club de Oficiales</title>
+    <title>Stratego - club de oficiales</title>
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/lobby.css">
 </head>
 <body>
-    <!-- Pantalla de Login (se oculta después de conectar) -->
+    <!-- pantalla de Login (se oculta despues de conectar) -->
     <div id="login-screen" class="login-container">
         <h1>⚔️ STRATEGO ⚔️</h1>
         <h2>Club de Oficiales</h2>
@@ -25,10 +25,10 @@
         </div>
     </div>
 
-    <!-- Pantalla principal del Lobby (oculta hasta que el usuario se conecte) -->
+    <!-- pantalla principal del Lobby (oculta hasta que el usuario se conecte) -->
     <div id="lobby-screen" class="lobby-container" style="display: none;">
         
-        <!-- Encabezado con info del usuario -->
+        <!-- encabezado con info del usuario -->
         <header class="lobby-header">
             <h1>⚔️ Club de Oficiales</h1>
             <div class="user-info">
@@ -37,22 +37,22 @@
             </div>
         </header>
 
-        <!-- Contenedor principal dividido en 3 secciones -->
+        <!-- contenedor principal dividido en 3 secciones -->
         <div class="lobby-main">
             
-            <!-- Sección 1: Lista de oficiales conectados -->
+            <!-- seccion 1: Lista de oficiales conectados -->
             <aside class="users-panel">
                 <h3>Oficiales Conectados</h3>
                 <div id="users-list" class="users-list">
-                    <!-- Los usuarios se cargarán dinámicamente aquí -->
+                    <!-- Los usuarios se cargaran dinamicamente aquí -->
                 </div>
             </aside>
 
-            <!-- Sección 2: Chat global -->
+            <!-- seccion 2: chat global -->
             <section class="chat-panel">
                 <h3>Chat Global</h3>
                 <div id="chat-messages" class="chat-messages">
-                    <!-- Los mensajes aparecerán aquí -->
+                    <!-- los mensajes apareceran aquí -->
                 </div>
                 <div class="chat-input-container">
                     <input 
@@ -65,7 +65,7 @@
                 </div>
             </section>
 
-            <!-- Sección 3: Panel de acciones -->
+            <!-- seccion 3: panel de acciones -->
             <aside class="actions-panel">
                 <h3>Acciones</h3>
                 
@@ -76,8 +76,8 @@
                         <p>Oponente seleccionado: <span id="selected-opponent">Ninguno</span></p>
                     </div>
                     <select id="game-mode-select">
-                        <option value="CLASSIC_WAR">Guerra Clásica (40 piezas)</option>
-                        <option value="QUICK_DUEL">Duelo Rápido (10 piezas)</option>
+                        <option value="CLASSIC_WAR">Guerra Clasica (40 piezas)</option>
+                        <option value="QUICK_DUEL">Duelo Rapido (10 piezas)</option>
                     </select>
                     <button id="challenge-btn" disabled>Enviar Reto</button>
                 </div>
@@ -86,10 +86,10 @@
 
                 <div class="action-section">
                     <h4>Modo PvE</h4>
-                    <p>Entrena contra el Mariscal Autómata</p>
+                    <p>Entrena contra el Mariscal Automata</p>
                     <select id="pve-mode-select">
-                        <option value="CLASSIC_WAR">Guerra Clásica (40 piezas)</option>
-                        <option value="QUICK_DUEL">Duelo Rápido (10 piezas)</option>
+                        <option value="CLASSIC_WAR">Guerra Clasica (40 piezas)</option>
+                        <option value="QUICK_DUEL">duelo Rapido (10 piezas)</option>
                     </select>
                     <button id="pve-btn">Iniciar Entrenamiento</button>
                 </div>
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <!-- Modal para notificaciones de retos recibidos -->
+    <!-- modal para notificaciones de retos recibidos -->
     <div id="challenge-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <h2>⚔️ ¡Reto Recibido!</h2>
