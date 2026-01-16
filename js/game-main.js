@@ -4,6 +4,12 @@ import { Piece } from './core/piece.js';
 import { PIECE_RANKS, BOARD_CONFIG } from '../utils/constants.js';
 import { validateMove, resolveCombat } from './core/rules.js';
 
+
+const matchId = localStorage.getItem('matchId');
+const myTeam = localStorage.getItem('myTeam'); // 'RED' o 'BLUE'
+const userId = localStorage.getItem('userId');
+const username = localStorage.getItem('username');
+
 //constante que contiene los valores del estado del juego
 const GAME_STATE = {
   phase: 'SETUP', // prepparacion (SETUP) o juego (PLAY)
@@ -17,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderer.render(board.matrix);
 
   //inicializa el inventario en equipo rojo que es el predetermindado
-  initializeFullInventory('RED');
+  initializeFullInventory(myTeam);
 
   // Añadir un indicador de turno en el HTML (si no existe, lo creamos al vuelo)
   let statusDisplay = document.getElementById('game-status');
@@ -74,11 +80,12 @@ document.addEventListener('DOMContentLoaded', () => {
       //condicion para permitir mover desde el inventario
       if (data.source !== 'inventory') return;
 
-      //solo se pueden colocar piezas en las 4 filas correspondientes al jugador, no a las del rival
-      if (row < 6) {
-        alert('En la fase de preparacion, solo puedes colocar piezas en tus 4 primeras filas (4 filas inferiores)');
-        return;
-      }
+  const isValidRow = (myTeam === 'RED' && row >= 6) || (myTeam === 'BLUE' && row <= 3);
+
+    if (!isValidRow) {
+    alert(`solo puedes colocar piezas en tus ${myTeam === 'RED' ? '4 filas inferiores (6-9)' : '4 filas superiores (0-3)'}`);
+    return;
+  }
 
       // condicion para colocar pieza si esta vacia
       if (board.matrix[row][col] === null) {

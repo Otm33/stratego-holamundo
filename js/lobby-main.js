@@ -509,7 +509,7 @@ function handleChallengeAnswered(payload) {
         localStorage.setItem('username', currentUsername);
         localStorage.setItem('protocolMode', protocolMode || 'SOCKET_FIRST');
         
-        window.location.href = 'setup.html';
+        window.location.href = 'game.html';
     }
 }
 
