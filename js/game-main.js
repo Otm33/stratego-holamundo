@@ -689,3 +689,107 @@ btnCargar.addEventListener('click', () => {
     alert("no encontre esa estrategia.");
   }
 });
+
+
+// --- LÓGICA DE GUARDADO/CARGADO PARA STRATEGO ---
+
+STORAGE_KEY = 'stratego_setups';
+btnGuardar = document.getElementById('btn-guardar');
+btnCargar = document.getElementById('btn-cargar');
+
+// 1. FUNCIÓN: Obtener estado actual del tablero (Adaptado a Board Matrix)
+function obtenerAlineacionActual() {
+  const alineacion = [];
+
+  // Recorremos la matriz 10x10
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      const celda = board.matrix[row][col];
+
+      // Si hay una pieza y es DE MI EQUIPO, la guardamos
+      if (celda && typeof celda === 'object' && celda.team === myTeam) {
+        alineacion.push({
+          rank: celda.rank,
+          row: row,
+          col: col
+        });
+      }
+    }
+  }
+  return alineacion;
+}
+
+// 2. FUNCIÓN: Restaurar posiciones en la matriz
+function restaurarAlineacion(datosGuardados) {
+  // Solo permitir cargar si estamos en fase de preparación
+  if (GAME_STATE.phase !== 'SETUP') {
+    alert("No puedes cargar una alineación con el juego empezado.");
+    return;
+  }
+
+  // 1. Limpiamos el tablero actual (usando tu función existente)
+  limpiarTablero();
+
+  // 2. Colocamos las piezas guardadas
+  datosGuardados.forEach(dato => {
+    // Creamos una nueva instancia de Piece en la posición guardada
+    board.matrix[dato.row][dato.col] = new Piece(dato.rank, myTeam);
+  });
+
+  // 3. Renderizamos para que se vean los cambios
+  renderer.render(board.matrix);
+
+  // Actualizamos el mensaje del inventario
+  document.getElementById('inventory').innerHTML = '<p style="color: #2ecc71;">✅ Alineación cargada</p>';
+  alert("¡Alineación cargada con éxito!");
+}
+
+// --- EVENTO GUARDAR ---
+btnGuardar.addEventListener('click', () => {
+  // Validar fase
+  if (GAME_STATE.phase !== 'SETUP') {
+    alert("Solo puedes guardar alineaciones durante la fase de preparación.");
+    return;
+  }
+
+  const nombreAlineacion = prompt("Ponle un nombre a esta estrategia (ej: Defensa Minera):");
+  if (!nombreAlineacion) return;
+
+  const alineacion = obtenerAlineacionActual();
+
+  // Validar que haya piezas para guardar
+  if (alineacion.length === 0) {
+    alert("El tablero está vacío o no tienes piezas colocadas.");
+    return;
+  }
+
+  let guardadas = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  guardadas[nombreAlineacion] = alineacion;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(guardadas));
+
+  alert(`Estrategia "${nombreAlineacion}" guardada.`);
+});
+
+// --- EVENTO CARGAR ---
+btnCargar.addEventListener('click', () => {
+  if (GAME_STATE.phase !== 'SETUP') {
+    alert("Ya no puedes cambiar la alineación, la batalla ha comenzado.");
+    return;
+  }
+
+  const guardadas = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+  if (!guardadas || Object.keys(guardadas).length === 0) {
+    alert("No tienes estrategias guardadas.");
+    return;
+  }
+
+  const nombres = Object.keys(guardadas).join('\n');
+  const seleccion = prompt(`Escribe el nombre de la estrategia a cargar:\n\n${nombres}`);
+
+  if (seleccion && guardadas[seleccion]) {
+    restaurarAlineacion(guardadas[seleccion]);
+  } else if (seleccion) {
+    alert("No encontré esa estrategia.");
+  }
+});
