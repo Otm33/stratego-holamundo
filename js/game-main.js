@@ -74,6 +74,11 @@ function hideTurnBlockModal() {
 
 
 
+
+
+// En game-main.js
+// En game-main.js
+
 function handleMatchStarted(event) {
   console.log('🎮 EVENTO MATCH_STARTED RECIBIDO:', event.data);
 
@@ -141,6 +146,11 @@ function handleMatchStarted(event) {
     alert("Hubo un error al iniciar la batalla. Revisa la consola (F12).");
   }
 }
+
+
+
+
+
 
 function handleOpponentMoved(event) {
   console.log('👁️👁️👁️ opponent_moved RECIBIDO:', event.data);
