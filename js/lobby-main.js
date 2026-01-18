@@ -484,6 +484,8 @@ async function answerChallenge(answer) {
  */
 function handleChallengeAnswered(payload) {
     console.log(' CHALLENGE ANSWERED - payload completo:', payload);
+
+    localStorage.setItem('mode', payload.info?.mode || payload.mode);
     
     // usar todo el payload
     const answer = payload.answer;
@@ -505,6 +507,9 @@ function handleChallengeAnswered(payload) {
         
         localStorage.setItem('matchId', matchId);
         localStorage.setItem('myTeam', challenger.userId === currentUserId ? 'RED' : 'BLUE');
+        
+         localStorage.setItem('isChallenger', challenger.userId === currentUserId ? 'true' : 'false');
+
         localStorage.setItem('userId', currentUserId);
         localStorage.setItem('username', currentUsername);
         localStorage.setItem('protocolMode', protocolMode || 'SOCKET_FIRST');
