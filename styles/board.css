@@ -69,3 +69,41 @@
 .piece.blue {
   background-color: #3498db;
 }
+
+/* Estilo para la neblina de guerra */
+.piece.fog {
+  background-color: #555 !important; /* Gris oscuro */
+  color: #ddd;
+  border: 2px dashed #888;
+  background-image: linear-gradient(135deg, #444 25%, transparent 25%, transparent 50%, #444 50%, #444 75%, transparent 75%, transparent);
+  background-size: 10px 10px; /* Patrón rayado para efecto de misterio */
+  font-size: 1.2rem;
+}
+
+/* Animación opcional para que la neblina respire */
+@keyframes fog-pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.piece.fog {
+  animation: fog-pulse 3s infinite;
+}
+
+/* Estilo para la pieza oculta (Neblina de guerra) */
+.piece.fog {
+  background-color: #95a5a6; /* Un color gris neutral */
+  border-color: #7f8c8d;     /* Borde gris más oscuro */
+  color: #ecf0f1;            /* Color del signo de interrogación */
+  cursor: default;           /* Cursor normal (no manito) para indicar que no se toca */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Sombra interna para darle misterio */
+}
+
+/* board.css */
+.piece.fog {
+  background-color: #7f8c8d !important; /* Gris */
+  border: 2px dashed #bdc3c7;
+  color: white;
+  cursor: not-allowed;
+}
