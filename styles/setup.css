@@ -1,0 +1,103 @@
+#setup-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #D1BD43;
+}
+
+#setup-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 2rem;
+}
+
+#status-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 1.1rem;
+}
+
+#team-display strong {
+    color: #D1BD43;
+}
+
+#opponent-status {
+    color: #aaa;
+}
+
+#opponent-status.ready {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.setup-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-action {
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-ready {
+    padding: 15px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-ready:hover:not(:disabled) {
+    background: #2ecc71;
+    transform: scale(1.05);
+}
+
+.btn-ready:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.info-box {
+    background: rgba(209, 189, 67, 0.1);
+    border: 2px solid #D1BD43;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.info-box h4 {
+    margin-top: 0;
+    color: #D1BD43;
+}
+
+.info-box p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+/* Resaltar filas válidas para colocar piezas */
+.cell.valid-deployment {
+    background-color: rgba(46, 204, 113, 0.2);
+    border: 1px dashed #2ecc71;
+}

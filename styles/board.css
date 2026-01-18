@@ -1,0 +1,109 @@
+/*este es el cuadro donde va a estar el tablero*/
+.board-container{
+  display: grid; /* grid para el diseño de la matriz de las casillas*/
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* un espacio 10 casillas por 10 casillas*/
+  gap:2px;/* un espacio entre ellas de 2*/
+  width: 650px;         /*ancho */
+  height: 650px;        /*alto */
+  background-color: #000; /*fondo negro*/
+  padding: 5px;
+}
+/* casilla de tierra  */
+.cell{
+  display: flex;/* para que se pueda modificar su ubicacion en pantalla*/
+  aspect-ratio: 1 / 1;/* para que aparescan como cuadrador*/
+  justify-content: center; /* centrar cada una de las casillas*/
+  align-items: center; 
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color:  #4A8234;/* verde*/
+  border-radius: 15px;/* bordes redondeados*/
+}
+/* casilla de lago*/
+.lake{  
+  background-color: #2F5C73;/* azul*/
+}
+
+/* diseño del espacio de juego*/
+.game-layout {
+  display: flex; /*acomoda todo uno al lado del inventario */
+  gap: 20px; /* espacio de 20 entre ellos*/
+  justify-content: center; /* los centra*/
+  padding: 20px;
+}
+
+/* barra lateral */
+.sidebar {
+  background-color: #7927F5; /* morado*/
+  padding: 10px;
+  border-radius: 8px;/* bordes redondeados*/
+  color: white;
+  min-width: 200px;
+}
+
+/* inventario */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 piezas por fila en el inventario */
+  gap: 5px;
+  margin-top: 10px;
+}
+
+/*piezas */
+.piece {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /*bordes redondeados */
+  background-color: #e74c3c; /* rojo */
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: grab; /* cursor en modo mano */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+  user-select: none; /* para que el usuario no seleccione el texot */
+}
+
+/* piezas azules por si toca ser azul */
+.piece.blue {
+  background-color: #3498db;
+}
+
+/* Estilo para la neblina de guerra */
+.piece.fog {
+  background-color: #555 !important; /* Gris oscuro */
+  color: #ddd;
+  border: 2px dashed #888;
+  background-image: linear-gradient(135deg, #444 25%, transparent 25%, transparent 50%, #444 50%, #444 75%, transparent 75%, transparent);
+  background-size: 10px 10px; /* Patrón rayado para efecto de misterio */
+  font-size: 1.2rem;
+}
+
+/* Animación opcional para que la neblina respire */
+@keyframes fog-pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.piece.fog {
+  animation: fog-pulse 3s infinite;
+}
+
+/* Estilo para la pieza oculta (Neblina de guerra) */
+.piece.fog {
+  background-color: #95a5a6; /* Un color gris neutral */
+  border-color: #7f8c8d;     /* Borde gris más oscuro */
+  color: #ecf0f1;            /* Color del signo de interrogación */
+  cursor: default;           /* Cursor normal (no manito) para indicar que no se toca */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Sombra interna para darle misterio */
+}
+
+/* board.css */
+.piece.fog {
+  background-color: #7f8c8d !important; /* Gris */
+  border: 2px dashed #bdc3c7;
+  color: white;
+  cursor: not-allowed;
+}

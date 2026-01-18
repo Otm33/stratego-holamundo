@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratego - club de oficiales</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/lobby.css">
+</head>
+<body>
+    <!-- pantalla de Login (se oculta despues de conectar) -->
+    <div id="login-screen" class="login-container">
+        <h1>⚔️ STRATEGO ⚔️</h1>
+        <h2>Club de Oficiales</h2>
+        <div class="login-form">
+            <input 
+                type="text" 
+                id="username-input" 
+                placeholder="Ingresa tu nombre de oficial (3-30 caracteres)"
+                maxlength="30"
+                minlength="3"
+            >
+            <button id="login-btn">Entrar al Cuartel</button>
+            <p id="login-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- pantalla principal del Lobby (oculta hasta que el usuario se conecte) -->
+    <div id="lobby-screen" class="lobby-container" style="display: none;">
+        
+        <!-- encabezado con info del usuario -->
+        <header class="lobby-header">
+            <h1>⚔️ Club de Oficiales</h1>
+            <div class="user-info">
+                <span id="current-username">Usuario</span>
+                <button id="logout-btn">Salir</button>
+            </div>
+        </header>
+
+        <!-- contenedor principal dividido en 3 secciones -->
+        <div class="lobby-main">
+            
+            <!-- seccion 1: Lista de oficiales conectados -->
+            <aside class="users-panel">
+                <h3>Oficiales Conectados</h3>
+                <div id="users-list" class="users-list">
+                    <!-- Los usuarios se cargaran dinamicamente aquí -->
+                </div>
+            </aside>
+
+            <!-- seccion 2: chat global -->
+            <section class="chat-panel">
+                <h3>Chat Global</h3>
+                <div id="chat-messages" class="chat-messages">
+                    <!-- los mensajes apareceran aquí -->
+                </div>
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Escribe un mensaje..."
+                        maxlength="200"
+                    >
+                    <button id="send-chat-btn">Enviar</button>
+                </div>
+            </section>
+
+            <!-- seccion 3: panel de acciones -->
+            <aside class="actions-panel">
+                <h3>Acciones</h3>
+                
+                <div class="action-section">
+                    <h4>Modo PvP</h4>
+                    <p>Selecciona un oficial de la lista para retarlo</p>
+                    <div id="challenge-info">
+                        <p>Oponente seleccionado: <span id="selected-opponent">Ninguno</span></p>
+                    </div>
+                    <select id="game-mode-select">
+                        <option value="CLASSIC_WAR">Guerra Clasica (40 piezas)</option>
+                        <option value="QUICK_DUEL">Duelo Rapido (10 piezas)</option>
+                    </select>
+                    <button id="challenge-btn" disabled>Enviar Reto</button>
+                </div>
+
+                <hr>
+
+                <div class="action-section">
+                    <h4>Modo PvE</h4>
+                    <p>Entrena contra el Mariscal Automata</p>
+                    <select id="pve-mode-select">
+                        <option value="CLASSIC_WAR">Guerra Clasica (40 piezas)</option>
+                        <option value="QUICK_DUEL">duelo Rapido (10 piezas)</option>
+                    </select>
+                    <button id="pve-btn">Iniciar Entrenamiento</button>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- modal para notificaciones de retos recibidos -->
+    <div id="challenge-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>⚔️ ¡Reto Recibido!</h2>
+            <p id="challenge-message"></p>
+            <div class="modal-buttons">
+                <button id="accept-challenge-btn" class="btn-accept">Aceptar</button>
+                <button id="reject-challenge-btn" class="btn-reject">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/lobby-main.js"></script>
+</body>
+</html>
