@@ -1,0 +1,669 @@
+/* ========================================
+   ESTILOS PARA LA PANTALLA DE LOGIN
+   ======================================== */
+html, body {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Contenedor que muestra el fondo y centra el contenido */
+.container {
+    display: grid;
+    grid-template-columns: minmax(320px, 480px) 1fr;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Login adaptable: respeta la altura de la pantalla sin overflow */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    color: white;
+}
+
+/* panel izquierdo que contiene login / lobby */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #000000 100%);
+    /* permite que hijos (como .lobby-container) se estiren y ocupen el espacio */
+    justify-content: center;
+    align-items: center;
+}
+
+/* panel derecho con la imagen de fondo (decorativo) */
+.right-panel {
+    background-image: url('/public/img/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    filter: brightness(0.4);
+}
+/* Cuando el usuario inicia sesión queremos que el contenedor ocupe todo el ancho */
+.container.expanded {
+    grid-template-columns: 1fr; /* solo una columna que ocupe todo el espacio */
+}
+
+/* pequeña transición para suavizar el cambio de layout */
+.container, .left-panel, .right-panel {
+    transition: grid-template-columns 240ms ease, width 240ms ease, opacity 200ms ease;
+}
+
+button.link-button a {
+    color: #D1BD43;
+    text-decoration: none;
+}
+
+/* Asegurar que el lobby ocupe todo el ancho sin overflow horizontal */
+#lobby-screen {
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.container.expanded .left-panel,
+.container.expanded .lobby-container {
+    width: 100vw;
+    max-width: 100vw;
+}
+
+/* Ocultar panel derecho cuando el contenedor está en modo expandido */
+.container.expanded .right-panel {
+    display: none;
+}
+
+/* Evitar scroll horizontal globalmente */
+html, body {
+    overflow-x: hidden;
+}
+
+.login-container h1 {
+    font-size: 3rem;
+    margin: auto;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #D1BD43;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    padding: 0;
+}
+
+.login-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #D1BD43;
+}
+
+.login-container h3 {
+    font-size: 1rem;
+    color: #D1BD43;
+}
+
+.login-form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 24px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    width: min(92vw, 420px);
+    max-height: calc(100vh - 64px);
+    overflow: auto;
+}
+
+#password-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #D1BD43;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 15px;
+}
+
+#password-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(209, 189, 67, 0.5);
+}
+
+
+#username-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #D1BD43;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 15px;
+}
+
+#username-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(209, 189, 67, 0.5);
+}
+
+#login-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    background: #D1BD43;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#login-btn:hover {
+    background: #ffd700;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(209, 189, 67, 0.4);
+}
+
+#login-btn:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    min-height: 20px;
+    text-align: center;
+}
+
+/* ========================================
+   ESTILOS PARA EL LOBBY PRINCIPAL
+   ======================================== */
+
+.lobby-container {
+    /* ocupar el espacio vertical disponible dentro de .left-panel */
+    flex: 1 1 auto;
+    min-height: 0; /* importante para que el hijo .lobby-main con flex:1 calcule correctamente */
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.lobby-header {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #D1BD43;
+}
+
+.lobby-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#current-username {
+    font-size: 1rem;
+    color: #D1BD43;
+    font-weight: bold;
+}
+
+#logout-btn {
+    padding: 8px 16px;
+    background: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+#logout-btn:hover {
+    background: #e74c3c;
+}
+
+/* ========================================
+   LAYOUT PRINCIPAL (3 COLUMNAS)
+   ======================================== */
+
+.lobby-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(200px, 300px) 1fr minmax(260px, 300px);
+    gap: 10px;
+    padding: 8px;
+    overflow: auto;
+}
+
+/* asegurar que .lobby-main pueda colapsar y que sus hijos con height:100% funcionen */
+.lobby-main {
+    min-height: 0;
+}
+
+/* cuando el container está expandido, fijar la altura del lobby-container a la ventana */
+.container.expanded .lobby-container {
+    height: 100vh;
+}
+
+/* proteger que users-panel no exceda y permita scroll interno */
+.users-panel {
+    min-height: 0;
+}
+
+/* ========================================
+   PANEL DE USUARIOS (IZQUIERDA)
+   ======================================== */
+
+input#user-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border: 2px solid #141620;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: #1e2133;
+    color: white;
+}
+
+input#user-search-input:focus {
+    outline: none;
+    border-color: #1a1d2e;
+    box-shadow: 0 0 10px rgba(37, 63, 148, 0.3);
+}
+
+.users-panel {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    /* ocupar toda la altura disponible dentro de .lobby-main */
+    height: 100%;
+}
+
+.users-panel h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #D1BD43;
+    border-bottom: 2px solid #D1BD43;
+    padding-bottom: 10px;
+}
+
+.users-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 6px;
+}
+
+.user-item {
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.user-item:hover {
+    background: rgba(209, 189, 67, 0.2);
+    transform: translateX(5px);
+}
+
+.user-item.selected {
+    border-color: #D1BD43;
+    background: rgba(209, 189, 67, 0.3);
+}
+
+.user-item.bot {
+    background: rgba(100, 149, 237, 0.2);
+    border-left: 3px solid cornflowerblue;
+}
+
+.user-item.in-match {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.user-name {
+    font-weight: bold;
+    display: block;
+}
+
+.user-status {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+/* ========================================
+   PANEL DE CHAT (CENTRO)
+   ======================================== */
+
+.chat-panel {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-panel h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #D1BD43;
+    border-bottom: 2px solid #D1BD43;
+    padding-bottom: 10px;
+}
+
+.chat-messages {
+    flex: 1;
+    min-height: 320px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-message {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #D1BD43;
+}
+
+.chat-message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.chat-username {
+    font-weight: bold;
+    color: #D1BD43;
+}
+
+.chat-timestamp {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.chat-content {
+    color: #eee;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #D1BD43;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(209, 189, 67, 0.3);
+}
+
+#send-chat-btn {
+    padding: 10px 20px;
+    background: #D1BD43;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-chat-btn:hover {
+    background: #ffd700;
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   PANEL DE ACCIONES (DERECHA)
+   ======================================== */
+
+.actions-panel {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+}
+
+.actions-panel h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #D1BD43;
+    border-bottom: 2px solid #D1BD43;
+    padding-bottom: 10px;
+}
+
+.action-section {
+    margin-bottom: 20px;
+}
+
+.action-section h4 {
+    color: #D1BD43;
+    margin-bottom: 10px;
+}
+
+.action-section p {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+#challenge-info {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#selected-opponent {
+    color: #D1BD43;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #D1BD43;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#challenge-btn {
+    background: #27ae60;
+    color: white;
+}
+
+#challenge-btn:hover:not(:disabled) {
+    background: #2ecc71;
+    transform: translateY(-2px);
+}
+
+#challenge-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+#pve-btn {
+    background: cornflowerblue;
+    color: white;
+}
+
+#pve-btn:hover {
+    background: #5a8fd8;
+    transform: translateY(-2px);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 20px 0;
+}
+
+/* ========================================
+   MODAL PARA RETOS
+   ======================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #D1BD43;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    min-width: 400px;
+}
+
+.modal-content h2 {
+    color: #D1BD43;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-accept {
+    background: #27ae60;
+    color: white;
+    padding: 12px 30px;
+}
+
+.btn-accept:hover {
+    background: #2ecc71;
+}
+
+.btn-reject {
+    background: #c0392b;
+    color: white;
+    padding: 12px 30px;
+}
+
+.btn-reject:hover {
+    background: #e74c3c;
+}
+
+/* ========================================
+   SCROLLBAR PERSONALIZADA
+   ======================================== */
+
+.users-list::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar,
+.actions-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.users-list::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track,
+.actions-panel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.users-list::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb,
+.actions-panel::-webkit-scrollbar-thumb {
+    background: #D1BD43;
+    border-radius: 10px;
+}
+
+.users-list::-webkit-scrollbar-thumb:hover,
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.actions-panel::-webkit-scrollbar-thumb:hover {
+    background: #ffd700;
+}

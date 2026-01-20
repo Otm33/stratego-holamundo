@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Stratego PvP - Duelo Rápido</title>
+    <link rel="stylesheet" href="styles/game.css">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+
+<header>
+    <h1>Stratego PvP - Duelo Rápido</h1>
+    <p id="turn-indicator">Preparando el tablero...</p>
+</header>
+
+<nav class="controls">
+    <button id="randomize-btn">Aleatorizar fichas</button>
+    <button id="start-btn">Comenzar juego</button>
+    <button id="surrender-btn">Rendirse</button>
+</nav>
+
+<main>
+    <section id="board" class="board"></section>
+</main>
+
+<section id="overlay" class="overlay hidden">
+    <h2 id="overlay-text"></h2>
+</section>
+
+<script src="js/app.js"></script>
+</body>
+</html>
